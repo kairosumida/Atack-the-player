@@ -7,8 +7,8 @@ public class Status : MonoBehaviour
     [SerializeField] private float rangeAtaq;
     private float rangeDeVisao;
     [SerializeField] private float velocidadeDeMovimento;
-    private float velocidadeAtaq;
-    private float danoPadrao;
+    [SerializeField] private float velocidadeAtaq;
+    [SerializeField] private float danoPadrao;
     public float GetDanoPadrao()
     {
         return danoPadrao;

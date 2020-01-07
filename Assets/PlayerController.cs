@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Player player;
     private IEnumerator acaoPlayer;
     private SerVivo alvo;
-
+    [SerializeField] Camera cam;
     public void PararAcoes()
     {
         StopCoroutine(acaoPlayer);
@@ -38,18 +38,24 @@ public class PlayerController : MonoBehaviour
         nav.velocity = Vector3.zero;
         while (true)
         {
-
+            
+            
             yield return new WaitForSeconds(1f / player.GetStatus().GetVelocidadeAtaq());//aspd
+            gameObject.transform.LookAt(alvo.transform.position);
             alvo.RecebeDano(player.GetStatus().GetDanoPadrao());//Dano do Jogador
+            Debug.Log("Aq");
             if (!EstaAlvoNoRange())
             {
-                StopCoroutine(acaoPlayer);
+                Debug.Log("Alvo fora do range");
                 acaoPlayer = Andando();
                 StartCoroutine(Andando());
+                yield break;
             }
             if (alvo.GetEstaMorto() || alvo == null)
             {
+                Debug.Log(alvo.GetEstaMorto());
                 PararAcoes();
+               
                 alvo = null;
 
                 //GetComponent<Animator>().Play("idle1");
@@ -62,9 +68,10 @@ public class PlayerController : MonoBehaviour
     {
         if (alvo == null)
             return false;
-
+        Debug.Log("Verif");
         if (Vector3.Distance(alvo.transform.position, transform.position) <= player.GetStatus().GetRangeAtaq())
         {
+            Debug.Log("No alvo");
             return true;
         }
         else
@@ -83,14 +90,21 @@ public class PlayerController : MonoBehaviour
         {
             nav.stoppingDistance = 0.5f;
             //GetComponent<Animator>().Play("Walk");
-            nav.speed = player.GetStatus().GetVelocidadeDeMovimento();
-            //GetComponent<Animator>().speed = statusPersonagem.GetVelocidadeMovimentoPadrao() / 3.5f;
-            yield return new WaitWhile(() => !VerificarSeEstaNoDestino() || !EstaAlvoNoRange());
+            while (!VerificarSeEstaNoDestino() && !EstaAlvoNoRange())
+            {
+                
+                nav.speed = player.GetStatus().GetVelocidadeDeMovimento();
+                //GetComponent<Animator>().speed = statusPersonagem.GetVelocidadeMovimentoPadrao() / 3.5f;
+                yield return new WaitForEndOfFrame();
+            }
+            nav.stoppingDistance = player.GetStatus().GetRangeAtaq();
+            
             if (EstaAlvoNoRange())
             {
-                StopCoroutine(acaoPlayer);
+                
                 acaoPlayer = Atacando();
                 StartCoroutine(acaoPlayer);
+                yield break;
             }
         }
     }
@@ -135,7 +149,7 @@ public class PlayerController : MonoBehaviour
 
     public void OperadorJogador()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
         if (Physics.Raycast(ray, out hitInfo))
@@ -144,6 +158,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(1))
                 {
+                    Debug.Log("Clicou em alvo");
                     MoverPara(hitInfo.collider.gameObject.GetComponent<SerVivo>().transform.position, hitInfo.collider.gameObject.GetComponent<SerVivo>());
                     return;
                 }
@@ -153,6 +168,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(1))
                 {
+                    Debug.Log("Sem alvo");
                     MoverPara(hitInfo.point, null);
                 }
             }
