@@ -18,8 +18,12 @@ public class PlayerController : MonoBehaviour
     public void MoverPara(Vector3 posicao, SerVivo al)
     {
         alvo = al;
-        StopCoroutine(acaoPlayer);
+        if (acaoPlayer != null)
+        {
+            StopCoroutine(acaoPlayer);
+        }
         nav.SetDestination(posicao);
+       
         acaoPlayer = Andando();
         StartCoroutine(acaoPlayer);
 
@@ -95,10 +99,12 @@ public class PlayerController : MonoBehaviour
         if (nav.velocity.sqrMagnitude > Mathf.Epsilon)
         {
             Vector3 normalizado = new Vector3(nav.velocity.normalized.x, 0, nav.velocity.normalized.z);
+
             transform.rotation = Quaternion.LookRotation(normalizado);
         }
 
     }
+ 
     private bool VerificarSeEstaNoDestino()
     {
         if (!nav.pathPending)
@@ -118,6 +124,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         player = GetComponent<Player>();
+        nav = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -144,7 +151,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                MoverPara(hitInfo.point, null);
+                if (Input.GetMouseButtonDown(1))
+                {
+                    MoverPara(hitInfo.point, null);
+                }
             }
 
         }

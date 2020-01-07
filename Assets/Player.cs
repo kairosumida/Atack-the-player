@@ -12,7 +12,7 @@ public class Player : SerVivo
     // Start is called before the first frame update
     void Start()
     {
-        
+        status = GetComponent<Status>();
     }
 
     // Update is called once per frame
