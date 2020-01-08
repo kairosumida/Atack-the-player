@@ -12,6 +12,7 @@ public class SerVivo : MonoBehaviour
         Vida -= dano;
         if (Vida <= 0)
         {
+            Vida = 0;
             estaMorto = true;
         }
     }

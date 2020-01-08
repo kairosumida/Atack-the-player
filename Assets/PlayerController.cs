@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(1f / player.GetStatus().GetVelocidadeAtaq());//aspd
             gameObject.transform.LookAt(alvo.transform.position);
             alvo.RecebeDano(player.GetStatus().GetDanoPadrao());//Dano do Jogador
-            Debug.Log("Aq");
             if (!EstaAlvoNoRange())
             {
                 Debug.Log("Alvo fora do range");
@@ -68,10 +67,8 @@ public class PlayerController : MonoBehaviour
     {
         if (alvo == null)
             return false;
-        Debug.Log("Verif");
         if (Vector3.Distance(alvo.transform.position, transform.position) <= player.GetStatus().GetRangeAtaq())
         {
-            Debug.Log("No alvo");
             return true;
         }
         else
@@ -158,7 +155,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(1))
                 {
-                    Debug.Log("Clicou em alvo");
                     MoverPara(hitInfo.collider.gameObject.GetComponent<SerVivo>().transform.position, hitInfo.collider.gameObject.GetComponent<SerVivo>());
                     return;
                 }
@@ -168,7 +164,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(1))
                 {
-                    Debug.Log("Sem alvo");
                     MoverPara(hitInfo.point, null);
                 }
             }
