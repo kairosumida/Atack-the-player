@@ -5,6 +5,7 @@ using UnityEngine;
 public class GrupoInimigo : MonoBehaviour
 {
     [SerializeField] private bool ehComandante;
+    [SerializeField] private List<Enemy> listaMembros;
     // Start is called before the first frame update
     void Start()
     {

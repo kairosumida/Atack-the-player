@@ -44,6 +44,7 @@ public class Enemy : SerVivo
     IEnumerator IndoAteOrigem()
     {
         yield return new WaitWhile(()=>!ChegouAOrigem());//Enquanto for verdadeiro espera
+
     }
     private bool ChegouAOrigem()
     {
